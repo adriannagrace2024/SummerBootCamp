@@ -1,25 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Caveat&family=Lobster+Two:ital@1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&display=swap');
 
-.books-header {
-  font-family: 'Lobster Two', cursive
+:root {
+  /* CSS HEX */
+  --background1: #93b7beff;
+  --background2: #f1fffaff;
+  --background3: #d5cfe1ff;
+  --secondary1: #b6a6caff;
+  --secondary2: #a09abcff;
+  --secondary3: #d4bebeff;
+}
+
+.card-header {
+  font-family: 'Nothing You Could Do', cursive
 }
 
 * {
-  font-family: sans-serif;
+  font-family: 'Caveat';
   margin: 0;
   padding: 0;
   font-size: 1.1rem;
 }
-
-:root {
-  /* CSS HEX */
-  --background1: #ffcdb2ff;
-  --background2: #ffb4a2ff;
-  --background3: #e5989bff;
-  --secondary1: #b5838dff;
-  --secondary2: #6d6875ff;
-}
-
 
 h1 {
   margin: 0;
@@ -34,13 +35,20 @@ p {
   text-align: left;
 }
 
+.published {
+  margin-left: 20px;
+  text-align: left;
+}
+
+
+
 header {
   position: fixed;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16);
   width: 100%;
   display: flex;
   flex-direction: row;
-  background-color: white;
+  background-color: var(--secondary1);
   font-weight: 300;
   padding: 15px;
   justify-content: center;
@@ -76,7 +84,7 @@ header li :hover {
 
 .content {
   padding: 74px 50px;
-  background-color: #f7f7f7;
+  background-color: var(--background1);
   display: flex;
   gap: 35px;
   flex-wrap: wrap;
@@ -85,7 +93,7 @@ header li :hover {
 
 .card {
   width: 28%;
-  background-color: var(--secondary1);
+  background-color: var(--background3);
   color: #1e2d2fe8;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -98,11 +106,18 @@ header li :hover {
   font-size: 1.5em;
 }
 
+.aab-cover {
+  width: 100px
+}
+
+.btwc-cover {
+  width: 100px;
+}
 
 button {
   width: 50%;
-  background-color: gray;
-  color: white;
+  background-color: var(--secondary1);
+  color: var(--secondary3);
   padding: 12px 0;
   border: none;
   border-radius: 4px;
