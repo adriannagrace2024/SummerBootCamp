@@ -2,6 +2,15 @@ main {
   background-color: var(--background3);
 }
 
+.photo {
+  width: 150px;
+  display: block;
+  margin: 0 auto;
+}
+
+.logo {
+  width: 35px;
+}
 
 @media screen and (max-width: 750px) {
   .info {
