@@ -89,7 +89,7 @@ header li :hover {
 }
 
 .content {
-  padding: 74px 50px;
+  padding: 100px 50px;
   background-color: var(--background1);
   display: flex;
   gap: 35px;

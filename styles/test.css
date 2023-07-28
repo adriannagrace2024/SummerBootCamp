@@ -16,41 +16,44 @@ main {
   width: 35px;
 }
 
+body {
+  margin: 0;
+}
+
+#c {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 147vh;
+  background-color: var(--background1);
+  z-index: 1;
+}
+
+.portal,
+h1,
+.card,
+main,
+.content,
+p,
+h3,
+.carousel,
+.carousel-inner,
+img {
+  z-index: 11;
+}
+
+.awesomeCarouselContainer {
+  width: 42%;
+  display: inline-block;
+}
+
+header,
+button {
+  z-index: 100;
+}
+
 @media screen and (max-width: 750px) {
   .info {
     padding-top: 100px;
   }
 }
-
-/* 
-body {
-  overflow: hidden;
-  background: #A1DBB2;
-}
-
-div,
-canvas {
-  position: absolute;
-}
-
-#text {
-  z-index: 200;
-  display: none;
-}
-
-input {
-  z-index: 400;
-  position: absolute;
-  text-transform: uppercase;
-  width: 90%;
-  bottom: 20px;
-  background: none;
-  outline: none;
-  border: none;
-  font-size: 30px;
-  color: #222;
-  font-weight: bold;
-  text-align: center;
-  border-bottom: 1px solid #333;
-  left: 5%;
-} */

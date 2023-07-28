@@ -1,230 +1,187 @@
-var height,
-  width,
-  container,
-  scene,
-  camera,
-  renderer,
-  particles = [],
-  mouseVector = new THREE.Vector3(0, 0, 0),
-  mousePos = new THREE.Vector3(0, 0, 0),
-  cameraLookAt = new THREE.Vector3(0, 0, 0),
-  cameraTarget = new THREE.Vector3(0, 0 ,800),
-  textCanvas,
-  textCtx,
-  textPixels = [],
-  input;
-var colors = ['#F7A541', '#F45D4C', '#FA2E59', '#4783c3', '#9c6cb7'];
+var MAX_PARTICLES = 1000,
+  RADIUS = 100,
+  MAX_LINES = 5,
+  MAX_LIFE_SPAN = 600,
+  MIN_DENSITY = 15,
+  OFFSET_DENSITY = 15,
+  _context,
+  _mouseX,
+  _mouseY,
+  _particles,
+  _canvasWidth,
+  _canvasHalfWidth,
+  _canvasHeight,
+  _canvasHalfHeight;
 
-function initStage() {
-  width = window.innerWidth;
-  height = window.innerHeight;
-  container = document.getElementById('stage');
-  window.addEventListener('resize', resize);
-  container.addEventListener('mousemove', mousemove);
+init();
+
+function init() {
+
+  _particles = [];
+  _context = c.getContext('2d');
+
+  window.addEventListener('resize', onResize);
+  window.addEventListener('mousemove', onMouseMove);
+
+  onResize();
+
+  createInitialParticles();
+
+  redraw();
 }
 
-function initScene() {
-  scene = new THREE.Scene();
-  renderer = new THREE.WebGLRenderer({
-    alpha: true,
-    antialias: true
-  });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(width, height);
-  container.appendChild(renderer.domElement);
-}
+function createInitialParticles() {
 
-function randomPos(vector) {
-  var radius = width * 3;
-  var centerX = 0;
-  var centerY = 0;
+  var x;
 
-  // ensure that p(r) ~ r instead of p(r) ~ constant
-  var r = width + radius * Math.random();
-  var angle = Math.random() * Math.PI * 2;
+  for (x = 50; x < _canvasWidth - 50; x += 25) {
 
-  // compute desired coordinates
-  vector.x = centerX + r * Math.cos(angle);
-  vector.y = centerY + r * Math.sin(angle);
-}
-
-function initCamera() {
-  fieldOfView = 75;
-  aspectRatio = width / height;
-  nearPlane = 1;
-  farPlane = 3000;
-  camera = new THREE.PerspectiveCamera(
-    fieldOfView,
-    aspectRatio,
-    nearPlane,
-    farPlane);
-  camera.position.z = 800;
-  console.log(camera.position);
-  console.log(cameraTarget);
-}
-
-function createLights() {
-  shadowLight = new THREE.DirectionalLight(0xffffff, 2);
-  shadowLight.position.set(20, 0, 10);
-  shadowLight.castShadow = true;
-  shadowLight.shadowDarkness = 0.01;
-  scene.add(shadowLight);
-
-  light = new THREE.DirectionalLight(0xffffff, .5);
-  light.position.set(-20, 0, 20);
-  scene.add(light);
-
-  backLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  backLight.position.set(0, 0, -20);
-  scene.add(backLight);
-}
-
-function Particle() {
-  this.vx = Math.random() * 0.05;
-  this.vy = Math.random() * 0.05;
-}
-
-Particle.prototype.init = function(i) {
-  var particle = new THREE.Object3D();
-  var geometryCore = new THREE.BoxGeometry(20, 20, 20);
-  var materialCore = new THREE.MeshLambertMaterial({
-    color: colors[i % colors.length],
-    shading: THREE.FlatShading
-  });
-  var box = new THREE.Mesh(geometryCore, materialCore);
-  box.geometry.__dirtyVertices = true;
-  box.geometry.dynamic = true;
-  particle.targetPosition = new THREE.Vector3((textPixels[i].x - (width / 2)) * 4, (textPixels[i].y) * 5, -10 * Math.random() + 20);
-  particle.position.set(width * 0.5, height * 0.5, -10 * Math.random() + 20);
-  randomPos(particle.position);
-
-  for (var i = 0; i < box.geometry.vertices.length; i++) {
-    box.geometry.vertices[i].x += -10 + Math.random() * 20;
-    box.geometry.vertices[i].y += -10 + Math.random() * 20;
-    box.geometry.vertices[i].z += -10 + Math.random() * 20;
-  }
-
-  particle.add(box);
-  this.particle = particle;
-}
-
-Particle.prototype.updateRotation = function() {
-  this.particle.rotation.x += this.vx;
-  this.particle.rotation.y += this.vy;
-}
-
-Particle.prototype.updatePosition = function() {
-  this.particle.position.lerp(this.particle.targetPosition, 0.02);
-}
-
-function render() {
-  renderer.render(scene, camera);
-}
-
-function updateParticles() {
-  for (var i = 0, l = particles.length; i < l; i++) {
-    particles[i].updateRotation();
-    particles[i].updatePosition();
+    _particles.push(new Particle(x - _canvasHalfWidth, -75 + (Math.random() * 100)));
   }
 }
 
-function setParticles() {
-  for (var i = 0; i < textPixels.length; i++) {
-    if (particles[i]) {
-      particles[i].particle.targetPosition.x = (textPixels[i].x - (width / 2)) * 4;
-      particles[i].particle.targetPosition.y = (textPixels[i].y) * 5;
-      particles[i].particle.targetPosition.z = -10 * Math.random() + 20;
-    } else {
-      var p = new Particle();
-      p.init(i);
-      scene.add(p.particle);
-      particles[i] = p;
+function onMouseMove(e) {
+
+  _mouseX = e.pageX;
+  _mouseY = e.pageY;
+}
+
+function onResize() {
+
+  _canvasWidth = c.offsetWidth;
+  _canvasHalfWidth = Math.round(_canvasWidth / 2);
+  _canvasHeight = c.offsetHeight,
+    _canvasHalfHeight = Math.round(_canvasHeight / 2);
+
+  c.width = _canvasWidth;
+  c.height = _canvasHeight;
+}
+
+function redraw() {
+
+  var copyParticles = _particles.slice(),
+    particle,
+    i;
+
+  if (_particles.length < MAX_PARTICLES && _mouseX && _mouseY) {
+
+    particle = new Particle(_mouseX - _canvasHalfWidth, _mouseY - _canvasHalfHeight);
+
+    _particles.push(particle);
+    _mouseX = false;
+    _mouseY = false;
+  }
+
+  _context.clearRect(0, 0, _canvasWidth, _canvasHeight);
+
+  for (i = 0; i < copyParticles.length; i++) {
+
+    particle = copyParticles[i];
+    particle.update();
+  }
+
+  drawLines();
+
+  requestAnimationFrame(redraw);
+}
+
+function drawLines() {
+
+  var particleA,
+    particleB,
+    distance,
+    opacity,
+    lines,
+    i,
+    j;
+
+  _context.beginPath();
+
+  for (i = 0; i < _particles.length; i++) {
+
+    lines = 0;
+    particleA = _particles[i];
+
+    for (j = i + 1; j < _particles.length; j++) {
+
+      particleB = _particles[j];
+      distance = getDistance(particleA, particleB);
+
+      if (distance < RADIUS) {
+
+        lines++;
+
+        if (lines <= MAX_LINES) {
+
+          opacity = 0.5 * Math.min((1 - distance / RADIUS), particleA.getOpacity(), particleB.getOpacity());
+          _context.beginPath();
+          _context.moveTo(particleA.getX() + _canvasHalfWidth, particleA.getY() + _canvasHalfHeight);
+          _context.lineTo(particleB.getX() + _canvasHalfWidth, particleB.getY() + _canvasHalfHeight);
+          _context.strokeStyle = 'rgba(255,255,255,' + opacity + ')';
+          _context.stroke();
+        }
+      }
+    }
+  }
+}
+
+function Particle(originX, originY) {
+
+  var _this = this,
+    _direction = -1 + Math.round(Math.random()) * 2,
+    _angle = Math.random() * 10,
+    _posX = originX,
+    _posY = originY,
+    _density = MIN_DENSITY + Math.random() * OFFSET_DENSITY,
+    _lifeSpan = 0,
+    _opacity = 1;
+
+  function update() {
+
+    _lifeSpan++;
+
+    if (_lifeSpan % 3 === 0) {
+
+      _opacity = 1 - _lifeSpan / MAX_LIFE_SPAN;
+
+      _angle += 0.001 * _direction;
+      _posY += (Math.cos(_angle + _density) + 1) * 0.75;
+      _posX += Math.sin(_angle) * 0.75;
+
+      if (_lifeSpan >= MAX_LIFE_SPAN) {
+
+        destroy();
+      }
     }
   }
 
-  for (var i = textPixels.length; i < particles.length; i++) {
-    randomPos(particles[i].particle.targetPosition);
-  }
-}
+  function destroy() {
 
-function initCanvas() {
-  textCanvas = document.getElementById('text');
-  textCanvas.style.width = width + 'px';
-  textCanvas.style.height = 200 + 'px';
-  textCanvas.width = width;
-  textCanvas.height = 200;
-  textCtx = textCanvas.getContext('2d');
-  textCtx.font = '700 100px Arial';
-  textCtx.fillStyle = '#555';
-}
+    var particle,
+      i;
 
-function initInput() {
-  input = document.getElementById('input');
-  input.addEventListener('keyup', updateText);
-  input.value = 'EDIT ME';
-}
+    for (i = 0; i < _particles.length; i++) {
 
-function updateText() {
-  var fontSize = (width / (input.value.length*1.3));
-  if (fontSize > 120) fontSize = 120;
-  textCtx.font = '700 ' + fontSize + 'px Arial';
-  textCtx.clearRect(0, 0, width, 200);
-  textCtx.textAlign = 'center';
-  textCtx.textBaseline = "middle";
-  textCtx.fillText(input.value.toUpperCase(), width / 2, 50);
+      particle = _particles[i];
 
-  var pix = textCtx.getImageData(0, 0, width, 200).data;
-  textPixels = [];
-  for (var i = pix.length; i >= 0; i -= 4) {
-    if (pix[i] != 0) {
-      var x = (i / 4) % width;
-      var y = Math.floor(Math.floor(i / width) / 4);
+      if (particle === _this) {
 
-      if ((x && x % 6 == 0) && (y && y % 6 == 0)) textPixels.push({
-        x: x,
-        y: 200-y + -120
-      });
+        _particles.splice(i, 1);
+      }
     }
   }
-  setParticles();
+
+  this.getOpacity = function() { return _opacity; };
+  this.getX = function() { return _posX; };
+  this.getY = function() { return _posY; };
+
+  this.update = update;
 }
 
-function animate() {
-  requestAnimationFrame(animate);
-  updateParticles();
-  camera.position.lerp(cameraTarget, 0.2);
-  camera.lookAt(cameraLookAt);
-  render();
+function getDistance(particle1, particle2) {
+
+  var deltaX = particle1.getX() - particle2.getX(),
+    deltaY = particle1.getY() - particle2.getY();
+
+  return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 }
-
-function resize() {
-  width = window.innerWidth;
-  height = window.innerHeight;
-  camera.aspect = width / height;
-  camera.updateProjectionMatrix();
-  renderer.setSize(width, height);
-
-  textCanvas.style.width = width + 'px';
-  textCanvas.style.height = 200 + 'px';
-  textCanvas.width = width;
-  textCanvas.height = 200;
-  updateText();
-}
-
-function mousemove(e) {
-  var x = e.pageX - width/2;
-  var y = e.pageY - height/2;
-  cameraTarget.x = x*-1;
-  cameraTarget.y = y;
-}
-
-initStage();
-initScene();
-initCanvas();
-initCamera();
-createLights();
-initInput();
-animate();
-setTimeout(function() {
-  updateText();
-}, 40);

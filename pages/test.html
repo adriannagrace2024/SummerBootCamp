@@ -6,17 +6,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="../styles/style.css">
   <link rel="stylesheet" href="../styles/test.css">
-  <!-- <script src="../scripts/paritcle.js"></script> -->
+  <script src="../scripts/paritcle.js" defer></script>
 </head>
 
 <body>
-  <!-- <div id="stage"></div>
+  <canvas id="c"></canvas>
 
-  <canvas id="text" width="700" height="200"></canvas>
-
-  <input id="input" type="text" value="EDIT ME" /> -->
   <div class="portal">
     <header>
       <h1>Anna Grace</h1>
@@ -31,6 +30,11 @@
             About Me
           </a>
         </li>
+        <li>
+          <a href="./pages/test.html">
+            Test Page
+          </a>
+        </li>
       </ul>
     </header>
 
@@ -38,17 +42,50 @@
       <div class="content">
         <h3>Things that make me happy</h3>
         <p>This page contains a few things that make me happy. This is by no means intended to be all-encompassing.</p>
+
         <img
           src="https://www.rustico.com/cdn/shop/products/Untitled-2_97253697-aba2-43f7-be45-1312015cc7d1.jpg?v=1683913099&width=1445"
           class="image" alt="Leather notebook">
-        <img
-          src="https://images.unsplash.com/photo-1585409677983-0f6c41ca9c3b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D&w=1000&q=80"
-          class="image" alt="Mountain">
         <img
           src="https://media.istockphoto.com/id/1284952123/photo/cat-sleeps-on-keyboard-pc-computer-shallow-dof.jpg?s=612x612&w=0&k=20&c=JZOdKBDuq_rfuiNIIbVv4u9q58AiYaa2T21ooUce9Vc="
           class="image" alt="Cat on computer">
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwth8fFPUJg-I7V0ZmFU9z_4mA0rCGZ52D7g&usqp=CAU"
           class="image" alt="Bible">
+
+        <div class="awesomeCarouselContainer">
+          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="https://c4.wallpaperflare.com/wallpaper/101/583/796/cat-high-cool-cat-wallpaper-preview.jpg"
+                  class="d-block w-100" alt="cat">
+              </div>
+              <div class="carousel-item">
+                <img src="https://i.pinimg.com/originals/26/98/1b/26981b8251fcf06abc08c8d5edfe57fe.jpg"
+                  class="d-block w-100" alt="cat">
+              </div>
+              <div class="carousel-item">
+                <img
+                  src="https://c4.wallpaperflare.com/wallpaper/595/798/475/animals-blue-cats-eyes-wallpaper-preview.jpg"
+                  class="d-block w-100" alt="cat">
+              </div>
+              <div class="carousel-item">
+                <img src="https://img.wallpapic.com/i935-547-231/medium/cats-animals-domestic-cat-kitten-wallpaper.jpg"
+                  class="d-block w-100" alt="cat">
+              </div>
+
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+              data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+              data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
         <canvas id="swarm"></canvas>
       </div>
     </main>
@@ -80,6 +117,9 @@
       </div>
     </footer>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
